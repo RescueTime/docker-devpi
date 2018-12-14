@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 set -x
-export DEVPI_SERVERDIR=/mnt
+export DEVPISERVER_SERVERDIR=/mnt
 export DEVPI_CLIENTDIR=/tmp/devpi-client
-[[ -f $DEVPI_SERVERDIR/.serverversion ]] || initialize=yes
+[[ -f $DEVPISERVER_SERVERDIR/.serverversion ]] || initialize=yes
 
 kill_devpi() {
     test -n "$DEVPI_PID" && kill $DEVPI_PID
@@ -21,7 +21,7 @@ trap kill_tail TERM
 
 devpi-server --start --host 0.0.0.0 --port 3141 || \
     { [ -f "$LOG_FILE" ] && cat "$LOG_FILE"; exit 1; }
-DEVPI_PID="$(cat $DEVPI_SERVERDIR/.xproc/devpi-server/xprocess.PID)"
+DEVPI_PID="$(cat $DEVPISERVER_SERVERDIR/.xproc/devpi-server/xprocess.PID)"
 
 if [[ $initialize = yes ]]; then
   devpi use http://localhost:3141
