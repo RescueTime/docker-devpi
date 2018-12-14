@@ -19,7 +19,10 @@ kill_tail() {
 trap kill_tail INT
 trap kill_tail TERM
 
-devpi-server --start --host 0.0.0.0 --port 3141 || \
+# NOTE: The --init flag is required so that the first time the server
+# runs with a given serverdir, necessary groundwork can be put in place.
+# It is smart enough to do nothing if the serverdir is not empty.
+devpi-server --start --init --host 0.0.0.0 --port 3141 || \
     { [ -f "$LOG_FILE" ] && cat "$LOG_FILE"; exit 1; }
 DEVPI_PID="$(cat $DEVPISERVER_SERVERDIR/.xproc/devpi-server/xprocess.PID)"
 
