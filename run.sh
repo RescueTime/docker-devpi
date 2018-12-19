@@ -3,7 +3,10 @@ set -e
 set -x
 export DEVPISERVER_SERVERDIR=/mnt
 export DEVPI_CLIENTDIR=/tmp/devpi-client
-[[ -f $DEVPISERVER_SERVERDIR/.serverversion ]] || initialize="yes"
+# .serverversion should probably be in this directory, but it's actually
+# the .nodeinfo file that devpi uses when checking for existing
+# devpi-server data.
+[[ -f $DEVPISERVER_SERVERDIR/.nodeinfo ]] || initialize="yes"
 
 kill_devpi() {
     test -n "$DEVPI_PID" && kill $DEVPI_PID
