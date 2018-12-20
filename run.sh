@@ -1,7 +1,15 @@
 #!/bin/bash
 set -e
 set -x
-export DEVPISERVER_SERVERDIR=/mnt
+# NOTE: This is not the root where the device is mounted. The root often
+# has a `lost+found` directory, which will break the initialization
+# logic in devpi.
+export DEVPISERVER_SERVERDIR=/mnt/devpi-server
+# And since this is not the root of the volume, we need to make sure the
+# subdirectory we're using is actually there. `-p` will make sure it
+# exists (it will create any needed parent directories, and not return
+# an error code if the full path already exists).
+mkdir -p "$DEVPISERVER_SERVERDIR"
 export DEVPI_CLIENTDIR=/tmp/devpi-client
 # .serverversion should probably be in this directory, but it's actually
 # the .nodeinfo file that devpi uses when checking for existing
